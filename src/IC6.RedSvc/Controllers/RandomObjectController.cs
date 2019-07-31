@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,8 @@ namespace IC6.RedSvc.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
+            Trace.TraceInformation("User requested a random red object.");
+
             return redObjects[DateTime.Now.Ticks % redObjects.Length];
         }
 
@@ -24,5 +27,9 @@ namespace IC6.RedSvc.Controllers
         //resiliency
 
         //retry pattern
+
+        //logging vs tracing in a container
+
+        //transaction id
     }
 }

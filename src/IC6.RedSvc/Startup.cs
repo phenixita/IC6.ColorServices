@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -25,6 +26,15 @@ namespace IC6.RedSvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var azServiceBusConfigSection = Configuration.GetSection("AzureServiceBus");
+            services.AddTransient<IQueueClient>(
+                (sb) =>
+                {
+                    return new QueueClient(azServiceBusConfigSection["ConnectionString"], azServiceBusConfigSection["QueueName"]);
+                }
+
+                );
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerDocument();
         }

@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using Microsoft.Azure.ServiceBus;
+
 
 namespace IC6.RedSvc.Controllers
 {
@@ -11,15 +12,27 @@ namespace IC6.RedSvc.Controllers
     [ApiController]
     public class RandomObjectController : ControllerBase
     {
-        string[] redObjects = { "Ferrari", "Coca Cola", "Pendolino", "Cherry", "Strawberry" };
+        private readonly IQueueClient _queueClient;
+
+        public RandomObjectController(IQueueClient queueClient)
+        {
+            _queueClient = queueClient;
+        }
+
+        readonly string[] objects = { "Coca Cola", "Blood", "Ferrari", "Fire", "Mars" };
 
         // GET api/values
         [HttpGet]
-        public ActionResult<string> Get()
+        public async Task<ActionResult<string>> Get()
         {
-            Trace.TraceInformation("User requested a random red object.");
+            Trace.TraceInformation("User requested a random green object.");
 
-            return redObjects[DateTime.Now.Ticks % redObjects.Length];
+            // Create a new message to send to the queue
+            string messageBody = objects[DateTime.Now.Ticks % objects.Length];
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+            await _queueClient.SendAsync(message);
+
+            return messageBody;
         }
 
         //fault inhection

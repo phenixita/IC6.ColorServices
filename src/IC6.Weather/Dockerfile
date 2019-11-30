@@ -1,20 +1,18 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-stretch-slim AS base
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0-stretch AS build
-WORKDIR /src
-COPY ["IC6.Weather/IC6.Weather.csproj", "IC6.Weather/"]
-RUN dotnet restore "IC6.Weather/IC6.Weather.csproj"
-COPY . .
-WORKDIR /src/IC6.Weather
-RUN dotnet build "IC6.Weather.csproj" -c Release -o /app
+# copy csproj and restore as distinct layers
+COPY *.sln .
+COPY IC6.Weather/*.csproj ./IC6.Weather/
+RUN dotnet restore
 
-FROM build AS publish
-RUN dotnet publish "IC6.Weather.csproj" -c Release -o /app
+# copy everything else and build app
+COPY IC6.Weather/. ./IC6.Weather/
+WORKDIR /app/IC6.Weather
+RUN dotnet publish -c Release -o out
 
-FROM base AS final
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
 WORKDIR /app
-COPY --from=publish /app .
+COPY --from=build /app/IC6.Weather/out ./
 ENTRYPOINT ["dotnet", "IC6.Weather.dll"]

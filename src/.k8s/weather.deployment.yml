@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weatherservice
+spec:
+  selector:
+    matchLabels:
+      app: weatherservice
+  template:
+    metadata:
+      labels:
+        app: weatherservice
+    spec:
+      containers:
+      - name: weatherservice
+        image: ic6weather
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 80

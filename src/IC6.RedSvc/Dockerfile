@@ -9,12 +9,12 @@ COPY ["IC6.RedSvc/IC6.RedSvc.csproj", "IC6.RedSvc/"]
 RUN dotnet restore "IC6.RedSvc/IC6.RedSvc.csproj"
 COPY . .
 WORKDIR "/src/IC6.RedSvc"
-RUN dotnet build "IC6.RedSvc.csproj" -c Release -o /app
+RUN dotnet build "IC6.RedSvc.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "IC6.RedSvc.csproj" -c Release -o /app
+RUN dotnet publish "IC6.RedSvc.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app .
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "IC6.RedSvc.dll"]

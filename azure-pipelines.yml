@@ -41,7 +41,7 @@ stages:
     - job: Deploy
       displayName: Deploy yml
       pool:
-        vmImage: ubuntu-latest
+        name: default
       steps:
         - task: Kubernetes@1
           inputs:

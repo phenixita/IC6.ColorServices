@@ -48,6 +48,6 @@ stages:
             connectionType: 'None'
             command: 'apply'
             useConfigurationFile: true
-            configuration: 'src/.k8s/weatherservice.service.yml'
+            configuration: 'src/.k8s/'
             secretType: 'dockerRegistry'
             containerRegistryType: 'Azure Container Registry'

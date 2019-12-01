@@ -35,7 +35,7 @@ stages:
           $(tag)
           latest
 
-- stage: 'Deploy to AKS'
+- stage: 'AKS'
   displayName: 'Deploy to AKS'
   jobs:
     - job: Deploy

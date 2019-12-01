@@ -18,5 +18,21 @@ WORKDIR /app
 COPY --from=build /src/IC6.Weather/out ./
 ENTRYPOINT ["dotnet", "IC6.Weather.dll"]
 
-# dalla cartella src del repo lanciare:
+# How to build the image:
+# from the `src` folder, exec:
 # docker build -f .\IC6.Weather\Dockerfile -t phenixita/ic6weather .
+
+# how to use the image:
+# docker run -d -p 8000:80 --rm phenixita/ic6weather:latest
+  
+
+
+
+
+
+
+
+
+
+
+

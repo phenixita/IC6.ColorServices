@@ -28,6 +28,7 @@ namespace IC6.WeatherClient.Controllers
             //We assume that by default the weather service is not available.
             //So we provide a default value like N.A.
             ViewBag.WeatherForecast = "N.A.";
+            ViewBag.ClientRestRequestInfo = $"client.BaseUrl = {client.BaseUrl}, request.Resource = {request.Resource}";
 
             //We define a timeout policy to provide resiliency and we won't create a indefinite
             //wait for a low priority service.

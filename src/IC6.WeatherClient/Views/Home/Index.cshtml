@@ -4,10 +4,13 @@
 }
 
 
-<div class="text-center">
-    <h1 class="display-4">Weather forecast</h1>
+    <div class="text-center">
+        <h1 class="display-4">Weather forecast</h1>
 
-    @Html.Raw(ViewBag.WeatherForecast);
+        @Html.Raw(ViewBag.WeatherForecast);
 
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        <p>Under the hood:</p>
+        <p>@ViewBag.ClientRestRequestInfo</p>
+
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>

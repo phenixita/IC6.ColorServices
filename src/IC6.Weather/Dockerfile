@@ -25,13 +25,8 @@ ENTRYPOINT ["dotnet", "IC6.Weather.dll"]
 # how to use the image:
 # docker run -d -p 8000:80 --rm phenixita/ic6weather:latest
   
-
-
-
-
-
-
-
+# http://localhost:8000/
+# http://localhost:8000/WeatherForecast
 
 
 

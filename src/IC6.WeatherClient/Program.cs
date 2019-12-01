@@ -12,7 +12,7 @@ namespace IC6.WeatherClient
     public class Program
     {
         public static string WeatherServiceUrl = Environment.GetEnvironmentVariable("WEATHER_SERVICE_URL") ?? "localhost";
-        public static string WeatherServicePort = Environment.GetEnvironmentVariable("WEATHER_SERVICE_PORT") ?? "32313";
+        public static string WeatherServicePort = Environment.GetEnvironmentVariable("WEATHER_SERVICE_PORT") ?? "63412";
 
         public static void Main(string[] args)
         {

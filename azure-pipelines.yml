@@ -45,8 +45,7 @@ stages:
       steps:
         - task: Kubernetes@1
           inputs:
-            connectionType: 'Kubernetes Service Connection'
-            kubernetesServiceEndpoint: 'K8sDesktop-ic6-aks-default-1575237123661'
+            connectionType: 'None'
             command: 'apply'
             useConfigurationFile: true
             configuration: 'src/.k8s/weatherservice.service.yml'

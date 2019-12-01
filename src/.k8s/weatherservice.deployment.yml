@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: weatherservice
-        image: ic6weather
+        image: phenixita/ic6weather:latest
         resources:
           limits:
             memory: "128Mi"

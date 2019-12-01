@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: weatherservice
+spec:
+  type: ClusterIP
+  selector:
+    app: weatherservice
+  ports:
+  - port: 8000
+    targetPort: 80

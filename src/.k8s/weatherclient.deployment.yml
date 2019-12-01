@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weatherclient
+spec:
+  selector:
+    matchLabels:
+      app: weatherclient
+  template:
+    metadata:
+      labels:
+        app: weatherclient
+    spec:
+      containers:
+      - name: weatherclient
+        image: phenixita/ic6weatherclient:latest
+        env:
+          - name: WEATHER_SERVICE_PORT
+            value: '8000'
+          - name: WEATHER_SERVICE_URL
+            value: 'weatherservice'
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 80

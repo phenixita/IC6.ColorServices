@@ -29,6 +29,7 @@ namespace IC6.WeatherClient.Controllers
             //So we provide a default value like N.A.
             ViewBag.WeatherForecast = "N.A.";
             ViewBag.ClientRestRequestInfo = $"client.BaseUrl = {client.BaseUrl}, request.Resource = {request.Resource}";
+            ViewBag.ProcessInfo = Environment.MachineName;
 
             //We define a timeout policy to provide resiliency and we won't create a indefinite
             //wait for a low priority service.

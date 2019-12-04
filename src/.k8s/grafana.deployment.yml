@@ -15,9 +15,21 @@ spec:
       containers:
       - name: grafana
         image: grafana/grafana
+        # volumeMounts:
+        #   - name: grafana-config-volume
+        #     mountPath: /var/lib/grafana
+        env:
+          - name: GF_SERVER_ROOT_URL
+            value: 'http://grafana.server.name'
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            value: 'secret'
         resources:
           limits:
             memory: "128Mi"
             cpu: "100m"
         ports:
         - containerPort: 3000
+      # volumes:
+      # - name: grafana-config-volume
+      #   configMap:
+      #     name: grafana-persistent-volume

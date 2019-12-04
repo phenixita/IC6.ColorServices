@@ -15,9 +15,18 @@ spec:
       containers:
       - name: prometheus
         image: prom/prometheus
+        volumeMounts:
+        - name: prometheus-config-volume
+          mountPath: /etc/prometheus/
         resources:
           limits:
             memory: "128Mi"
             cpu: "100m"
         ports:
         - containerPort: 9090
+      volumes:
+      - name: prometheus-config-volume
+        configMap:
+          # Provide the name of the ConfigMap containing the files you want
+          # to add to the container
+          name: prometheus-config

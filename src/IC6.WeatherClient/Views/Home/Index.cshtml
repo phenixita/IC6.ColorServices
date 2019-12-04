@@ -5,16 +5,17 @@
 
 
     <div class="text-center">
-        <h1 class="display-4">Weather forecast v5</h1>
+        <h1 class="display-4">Weather forecast v6</h1>
 
         <p>Client config</p>
-        
+
         <p>@ViewBag.ClientRestRequestInfo</p>
 
         <p>Process info</p>
         <p>@ViewBag.ProcessInfo</p>
 
-        @Html.Raw(ViewBag.WeatherForecast);
+        <p>Weather forecasts raw data</p>
+        <p>@Html.Raw(ViewBag.WeatherForecast);</p>
 
         <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     </div>

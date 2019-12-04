@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Prometheus;
 
 namespace IC6.Weather
 {
@@ -45,6 +46,9 @@ namespace IC6.Weather
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseHttpMetrics();
+            app.UseMetricServer();
 
             app.UseEndpoints(endpoints =>
             {

@@ -24,10 +24,10 @@ stages:
     steps:
     
     - task: Docker@2
-      displayName: Build and push
+      displayName: Build and push weather server
       inputs:
         containerRegistry: 'DockerHubPhenixita'
-        repository: $(container.repository)
+        repository: $(container.repository)server
         command: 'buildAndPush'
         Dockerfile: 'src/IC6.Weather/Dockerfile'
         buildContext: $(docker.buildContext)
@@ -36,12 +36,24 @@ stages:
           latest
 
     - task: Docker@2
-      displayName: Build and push
+      displayName: Build and push weather client
       inputs:
         containerRegistry: 'DockerHubPhenixita'
         repository: $(container.repository)client
         command: 'buildAndPush'
         Dockerfile: 'src/IC6.WeatherClient/Dockerfile'
+        buildContext: $(docker.buildContext)
+        tags: |
+          $(tag)
+          latest
+
+    - task: Docker@2
+      displayName: Build and push weather data layer
+      inputs:
+        containerRegistry: 'DockerHubPhenixita'
+        repository: $(container.repository)datalayer
+        command: 'buildAndPush'
+        Dockerfile: 'src/IC6.Weather.DataLayer/Dockerfile'
         buildContext: $(docker.buildContext)
         tags: |
           $(tag)

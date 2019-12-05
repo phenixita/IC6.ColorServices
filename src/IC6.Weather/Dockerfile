@@ -16,7 +16,7 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
 WORKDIR /app
 COPY --from=build /src/IC6.Weather/out ./
-ENTRYPOINT ["dotnet", "IC6.Weather.dll"]
+ENTRYPOINT ["dotnet", "IC6.Weather.Server.dll"]
 
 # How to build the image:
 # from the `src` folder, exec:

@@ -23,7 +23,7 @@ ENTRYPOINT ["dotnet", "IC6.Weather.dll"]
 # docker build -f .\IC6.Weather\Dockerfile -t phenixita/ic6weather .
 
 # how to use the image:
-# docker run -d -p 8000:80 --rm phenixita/ic6weather:latest
+# docker run -d -p 8000:80 -e "WEATHER_DATALAYER_SERVICE_PORT=80" -e "WEATHER_DATALAYER_SERVICE_URL=172.17.0.4" --rm phenixita/ic6weather:latest
   
 # http://localhost:8000/
 # http://localhost:8000/WeatherForecast

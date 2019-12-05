@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RestSharp;
 
 namespace IC6.Weather.Controllers
 {
@@ -11,10 +12,7 @@ namespace IC6.Weather.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+      
 
         private readonly ILogger<WeatherForecastController> _logger;
 
@@ -24,26 +22,16 @@ namespace IC6.Weather.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public string Get()
         {
-            if (ResiliencyTesting.ServiceDown)
-            {
-                throw new InvalidOperationException();
-            }
+            var client = new RestClient($"http://{Program.WeatherDataLayerUrl}:{Program.WeatherDataLayerPort}");
+            var request = new RestRequest("/WeatherData/");
 
-            if (ResiliencyTesting.SecondsAddedOfDelay > 0)
-            {
-                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(ResiliencyTesting.SecondsAddedOfDelay));
-            }
+            var weatherDataLayerResult = client.Execute(request);
 
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return weatherDataLayerResult.Content;
+
+
         }
     }
 }

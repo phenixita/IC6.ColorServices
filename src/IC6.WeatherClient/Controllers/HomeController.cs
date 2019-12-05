@@ -74,18 +74,17 @@ namespace IC6.WeatherClient.Controllers
             {
                 retryExp.Wrap(timeoutPolicy).Execute(() =>
                 {
-                    System.Diagnostics.Trace.WriteLine($"{System.Threading.Thread.CurrentThread.ManagedThreadId}: client execute started");
+                    Trace.WriteLine($"{System.Threading.Thread.CurrentThread.ManagedThreadId}: client execute started");
 
                     var weatherForecast = client.Execute(request);
 
-                    System.Diagnostics.Trace.WriteLine($"{System.Threading.Thread.CurrentThread.ManagedThreadId}: client execute ok");
+                    Trace.WriteLine($"{System.Threading.Thread.CurrentThread.ManagedThreadId}: client execute ok");
 
                     ViewBag.WeatherForecast = weatherForecast.Content;
                 });
             }
-            catch (Polly.Timeout.TimeoutRejectedException) { 
-                    System.Diagnostics.Trace.WriteLine("timeout");
-
+            catch (Polly.Timeout.TimeoutRejectedException) {
+                Trace.WriteLine("timeout");
             }
             catch (Exception) { }
 

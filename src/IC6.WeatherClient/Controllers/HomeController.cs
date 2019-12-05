@@ -46,7 +46,15 @@ namespace IC6.WeatherClient.Controllers
             ViewBag.ClientRestRequestInfo = $"client.BaseUrl = {client.BaseUrl}, request.Resource = {request.Resource}";
             ViewBag.ProcessInfo = Environment.MachineName;
 
+            if (ResiliencyTesting.ServiceDown)
+            {
+                throw new OperationCanceledException();
+            }
 
+            if (ResiliencyTesting.SecondsAddedOfDelay > 0)
+            {
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(ResiliencyTesting.SecondsAddedOfDelay));
+            }
 
 
             var weatherForecast = client.Execute(request);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IC6.Weather.Controllers
+namespace IC6.WeatherClient.Controllers
 {
     [Route("[controller]")]
     [ApiController]

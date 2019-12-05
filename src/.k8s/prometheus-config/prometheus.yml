@@ -18,16 +18,24 @@ scrape_configs:
         labels:
           group: 'prom'
 
-  - job_name: 'weatherservice'
-    scrape_interval: 5s
+  - job_name: 'weatherdatalayer'
+    scrape_interval: 2s
     static_configs:
-      - targets: ['weatherservice:8000']
+      - targets: ['weatherdatalayer:8002']
         labels:
-          group: 'weatherservice'
+          group: 'weatherdatalayer'
+
+
+  - job_name: 'weatherserver'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['weatherserver:8001']
+        labels:
+          group: 'weatherserver'
 
 
   - job_name: 'weatherclient'
-    scrape_interval: 5s
+    scrape_interval: 2s
     static_configs:
 
       - targets: ['weatherclient:8000']

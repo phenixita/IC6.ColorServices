@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Prometheus;
 
 namespace IC6.Weather.DataLayer
 {
@@ -41,6 +42,9 @@ namespace IC6.Weather.DataLayer
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseHttpMetrics();
+            app.UseMetricServer();
 
             app.UseEndpoints(endpoints =>
             {

@@ -60,12 +60,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(http_request_duration_seconds_sum{job=\"weatherclient\",}) / sum(http_requests_received_total{job=\"weatherclient\"})",
+          "expr": "sum(http_request_duration_seconds_sum{job=\"weatherclient\",controller=\"Home\",action=\"Index\"}) / sum(http_requests_received_total{job=\"weatherclient\",controller=\"Home\",action=\"Index\"})",
           "instant": false,
           "refId": "A"
         },
         {
-          "expr": "sum(http_request_duration_seconds_sum{job=\"weatherserver\",}) / sum(http_requests_received_total{job=\"weatherserver\"})",
+          "expr": "sum(http_request_duration_seconds_sum{controller=\"WeatherForecast\"}) / sum(http_requests_received_total{controller=\"WeatherForecast\"})",
           "refId": "B"
         }
       ],
@@ -323,5 +323,5 @@
   "timezone": "browser",
   "title": "Weather",
   "uid": "ioJ6RtaWz",
-  "version": 5
+  "version": 7
 }

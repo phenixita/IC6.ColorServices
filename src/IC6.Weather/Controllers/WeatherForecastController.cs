@@ -27,6 +27,16 @@ namespace IC6.Weather.Controllers
             var client = new RestClient($"http://{Program.WeatherDataLayerUrl}:{Program.WeatherDataLayerPort}");
             var request = new RestRequest("/WeatherData/");
 
+            if (ResiliencyTesting.ServiceDown)
+            {
+                throw new OperationCanceledException();
+            }
+
+            if (ResiliencyTesting.SecondsAddedOfDelay > 0)
+            {
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(ResiliencyTesting.SecondsAddedOfDelay));
+            }
+
             var weatherDataLayerResult = client.Execute(request);
 
             return weatherDataLayerResult.Content;

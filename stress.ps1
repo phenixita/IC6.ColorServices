@@ -2,7 +2,18 @@
 # NOTE: If you want to stress test all cores simply don't pass any argument.
 
 function StressCPUCores {
-param ([int]$numberOfCores)
+param ([string]$url, [int]$numberOfCores, [int]$iterations)
+
+if ( ($iterations -eq $null) -or ( $iterations -eq ''))
+{
+  $iterations = 3
+}
+
+
+if ( ($url -eq $null) -or ( $url -eq ''))
+{
+  $url = 'http://localhost:8000/'
+}
 
 if ( ($numberOfCores -eq $null) -or ( $numberOfCores -eq ''))
 {
@@ -12,14 +23,15 @@ Write-Host "Number of cores to target: " $numberOfCores;
 
 foreach ($counter in 1..$numberOfCores){
     Start-Job -ScriptBlock{
-    $result = 1
-        foreach ($number in 1..10){
-            $result = $result * $number
-            Invoke-WebRequest https://localhost:44312/MemoryIntensive
+    
+        foreach ($number in 1..$iterations){
+             
+            Invoke-WebRequest $url
+            
         }# end foreach
     }# end Start-Job
 }# end foreach
 
 }
 
-StressCPUCores $args[0]
+StressCPUCores $args[0] $args[1] $args[2]

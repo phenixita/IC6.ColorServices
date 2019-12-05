@@ -46,47 +46,13 @@ namespace IC6.WeatherClient.Controllers
             ViewBag.ClientRestRequestInfo = $"client.BaseUrl = {client.BaseUrl}, request.Resource = {request.Resource}";
             ViewBag.ProcessInfo = Environment.MachineName;
 
-            //We define a timeout policy to provide resiliency and we won't create a indefinite
-            //wait for a low priority service.
-            var retryExp = Policy
-              .Handle<Exception>()
-              .WaitAndRetry(_retries, retryAttempt =>
-              {
-                  if (_expRetries)
-                  {
-                      return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt));
-                  }
-                  else
-                  {
-                      return TimeSpan.FromSeconds(2);
-                  }
-              }
-              );
 
-            var timeoutPolicy = Policy.Timeout(_timeoutSeconds, onTimeout: (context, timeSpan, task) =>
-            {
-                _logger.LogWarning($"{context.PolicyKey} at {context.OperationKey}: execution timed out after {timeSpan.TotalSeconds} seconds.");
 
-            }, timeoutStrategy: Polly.Timeout.TimeoutStrategy.Pessimistic); //This is not a best practice for production workloads with Polly. https://github.com/App-vNext/Polly/wiki/Timeout
 
-            //We query the weather service through the defined policy.
-            try
-            {
-                retryExp.Wrap(timeoutPolicy).Execute(() =>
-                {
-                    Trace.WriteLine($"{System.Threading.Thread.CurrentThread.ManagedThreadId}: client execute started");
+            var weatherForecast = client.Execute(request);
 
-                    var weatherForecast = client.Execute(request);
+            ViewBag.WeatherForecast = weatherForecast.Content;
 
-                    Trace.WriteLine($"{System.Threading.Thread.CurrentThread.ManagedThreadId}: client execute ok");
-
-                    ViewBag.WeatherForecast = weatherForecast.Content;
-                });
-            }
-            catch (Polly.Timeout.TimeoutRejectedException) {
-                Trace.WriteLine("timeout");
-            }
-            catch (Exception) { }
 
             return View();
         }

@@ -26,6 +26,16 @@ namespace IC6.Weather.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            if (ResiliencyTesting.ServiceDown)
+            {
+                throw new InvalidOperationException();
+            }
+
+            if (ResiliencyTesting.SecondsAddedOfDelay > 0)
+            {
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(ResiliencyTesting.SecondsAddedOfDelay));
+            }
+
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

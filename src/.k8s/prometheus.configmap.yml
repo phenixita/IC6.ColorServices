@@ -7,11 +7,13 @@ data:
     \ external_labels:\r\n    monitor: 'codelab-monitor'\r\n\r\n# A scrape configuration
     containing exactly one endpoint to scrape:\r\n# Here it's Prometheus itself.\r\nscrape_configs:\r\n
     \ # The job name is added as a label `job=<job_name>` to any timeseries scraped
-    from this config.\r\n  - job_name: 'prometheus'\r\n\r\n    # Override the global
-    default and scrape targets from this job every 5 seconds.\r\n    scrape_interval:
-    5s\r\n\r\n    static_configs:\r\n      - targets: ['localhost:9090']\r\n        labels:\r\n
-    \         group: 'prom'\r\n\r\n  - job_name: 'weather'\r\n\r\n    scrape_interval:
-    5s\r\n\r\n    static_configs:\r\n\r\n      - targets: ['weatherservice:8000']\r\n
-    \       labels:\r\n          group: 'weather'"
+    from this config.\r\n  - job_name: 'prometheus'\r\n    # Override the global default
+    and scrape targets from this job every 5 seconds.\r\n    scrape_interval: 5s\r\n
+    \   static_configs:\r\n      - targets: ['localhost:9090']\r\n        labels:\r\n
+    \         group: 'prom'\r\n\r\n  - job_name: 'weatherservice'\r\n    scrape_interval:
+    5s\r\n    static_configs:\r\n      - targets: ['weatherservice:8000']\r\n        labels:\r\n
+    \         group: 'weatherservice'\r\n\r\n\r\n  - job_name: 'weatherclient'\r\n
+    \   scrape_interval: 5s\r\n    static_configs:\r\n\r\n      - targets: ['weatherclient:8000']\r\n
+    \       labels:\r\n          group: 'weatherclient'"
 metadata:
   name: prometheus-config

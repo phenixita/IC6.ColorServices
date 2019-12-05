@@ -33,7 +33,13 @@ namespace IC6.WeatherClient.Controllers
 
             //We define a timeout policy to provide resiliency and we won't create a indefinite
             //wait for a low priority service.
-            var policy = Policy.Timeout(1, onTimeout: (context, timeSpan, task) =>
+            var retryExp = Policy
+              .Handle<Exception>()
+              .WaitAndRetry(5, retryAttempt =>
+                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
+              );
+
+            var timeoutPolicy = Policy.Timeout(2, onTimeout: (context, timeSpan, task) =>
             {
 
                 _logger.LogWarning($"{context.PolicyKey} at {context.OperationKey}: execution timed out after {timeSpan.TotalSeconds} seconds.");
@@ -43,15 +49,15 @@ namespace IC6.WeatherClient.Controllers
             //We query the weather service through the defined policy.
             try
             {
-                policy.Execute(() =>
+                retryExp.Wrap(timeoutPolicy).Execute(() =>
                 {
-
                     var weatherForecast = client.Execute(request);
 
                     ViewBag.WeatherForecast = weatherForecast.Content;
                 });
             }
             catch (Polly.Timeout.TimeoutRejectedException) { }
+            catch (Exception) { }
 
             return View();
         }

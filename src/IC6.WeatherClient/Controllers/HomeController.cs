@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using IC6.WeatherClient.Models;
 using RestSharp;
 using Polly;
+using System.Threading;
+using Polly.Retry;
 
 namespace IC6.WeatherClient.Controllers
 {
@@ -21,7 +23,7 @@ namespace IC6.WeatherClient.Controllers
         }
 
         private static int _timeoutSeconds = 2;
-        private static int _retries = 2;
+        private static int _retries = 3;
         private static bool _expRetries = false;
 
         [HttpGet("SetPolicies")]
@@ -40,8 +42,7 @@ namespace IC6.WeatherClient.Controllers
             var client = new RestClient($"http://{Program.WeatherServiceUrl}:{Program.WeatherServicePort}");
             var request = new RestRequest("/WeatherForecast/");
 
-            //We assume that by default the wea_ther service is not available.
-            //So we provide a default value like N.A.
+
             ViewBag.WeatherForecast = "N.A.";
             ViewBag.ClientRestRequestInfo = $"client.BaseUrl = {client.BaseUrl}, request.Resource = {request.Resource}";
             ViewBag.ProcessInfo = Environment.MachineName;
@@ -56,12 +57,33 @@ namespace IC6.WeatherClient.Controllers
                 System.Threading.Thread.Sleep(TimeSpan.FromSeconds(ResiliencyTesting.SecondsAddedOfDelay));
             }
 
-
-            var weatherForecast = client.Execute(request);
-
-            ViewBag.WeatherForecast = weatherForecast.Content;
+            var timeoutPolicy = Policy.Timeout(_timeoutSeconds, Polly.Timeout.TimeoutStrategy.Pessimistic);
 
 
+            RetryPolicy retryPolicy;
+            if (_expRetries)
+            {
+                retryPolicy = Policy.Handle<Polly.Timeout.TimeoutRejectedException>()
+                            .WaitAndRetry(_retries, retryAttempt =>
+                                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+            }
+            else
+            {
+                retryPolicy = Policy.Handle<Polly.Timeout.TimeoutRejectedException>()
+                                                  .WaitAndRetry(_retries, retryAttempt =>
+                                    TimeSpan.FromSeconds(3));
+            }
+
+
+            var globalPolicy = Policy.Wrap(retryPolicy, timeoutPolicy);
+            var context = new Context();
+            context.Add("weatherForecast", "");
+            globalPolicy.Execute((c) =>
+            {
+                context["weatherForecast"] = client.Execute(request).Content;
+            }, context);
+
+            ViewBag.WeatherForecast = context["weatherForecast"];
             return View();
         }
 

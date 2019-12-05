@@ -36,6 +36,9 @@ namespace IC6.Weather.DataLayer.Controllers
                 System.Threading.Thread.Sleep(TimeSpan.FromSeconds(ResiliencyTesting.SecondsAddedOfDelay));
             }
 
+            var jitterer = new Random(DateTime.Now.Second);
+            System.Threading.Thread.Sleep(jitterer.Next(500,2000));
+
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

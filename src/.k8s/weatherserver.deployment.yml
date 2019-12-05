@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: weatherserver
-        image: phenixita/ic6weather:latest
+        image: phenixita/ic6weatherserver:latest
         env:
           - name: WEATHER_DATALAYER_SERVICE_PORT
             value: '8002'

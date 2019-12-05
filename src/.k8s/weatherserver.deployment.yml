@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weatherserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weatherserver
+  template:
+    metadata:
+      labels:
+        app: weatherserver
+    spec:
+      containers:
+      - name: weatherserver
+        image: phenixita/ic6weather:latest
+        env:
+          - name: WEATHER_DATALAYER_SERVICE_PORT
+            value: '8002'
+          - name: WEATHER_DATALAYER_SERVICE_URL
+            value: 'weatherdatalayer'
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 80

@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: weatherclient
+  name: weatherdatalayer
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
-    app: weatherclient
+    app: weatherdatalayer
   ports:
-  - port: 8000
+  - port: 8002
     targetPort: 80

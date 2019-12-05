@@ -16,9 +16,9 @@ spec:
         image: phenixita/ic6weatherclient:latest
         env:
           - name: WEATHER_SERVICE_PORT
-            value: '8000'
+            value: '8001'
           - name: WEATHER_SERVICE_URL
-            value: 'weatherservice'
+            value: 'weatherserver'
         resources:
           limits:
             memory: "128Mi"

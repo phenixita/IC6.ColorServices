@@ -1,20 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: weatherservice
+  name: weatherdatalayer
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: weatherservice
+      app: weatherdatalayer
   template:
     metadata:
       labels:
-        app: weatherservice
+        app: weatherdatalayer
     spec:
       containers:
-      - name: weatherservice
-        image: phenixita/ic6weather:latest
+      - name: weatherdatalayer
+        image: phenixita/ic6weatherdatalayer:latest
         resources:
           limits:
             memory: "128Mi"

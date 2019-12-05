@@ -4,8 +4,8 @@ WORKDIR /app
 # copy csproj and restore as distinct layers
 # COPY *.sln .
 WORKDIR /src
-COPY IC6.Weather/IC6.Weather.csproj ./IC6.Weather/
-RUN dotnet restore IC6.Weather/IC6.Weather.csproj
+COPY IC6.Weather/IC6.Weather.Server.csproj ./IC6.Weather/
+RUN dotnet restore IC6.Weather/IC6.Weather.Server.csproj
 
 # copy everything else and build app
 COPY IC6.Weather/. ./IC6.Weather/
@@ -23,10 +23,8 @@ ENTRYPOINT ["dotnet", "IC6.Weather.Server.dll"]
 # docker build -f .\IC6.Weather\Dockerfile -t phenixita/ic6weather .
 
 # how to use the image:
-# docker run -d -p 8000:80 -e "WEATHER_DATALAYER_SERVICE_PORT=80" -e "WEATHER_DATALAYER_SERVICE_URL=172.17.0.4" --rm phenixita/ic6weather:latest
-  
-# http://localhost:8000/
-# http://localhost:8000/WeatherForecast
+# docker run -d -p 8001:80 -e "WEATHER_DATALAYER_SERVICE_PORT=80" -e "WEATHER_DATALAYER_SERVICE_URL=172.17.0.2" --rm phenixita/ic6weather:latest
+# curl http://localhost:8001/WeatherForecast
 
 
 

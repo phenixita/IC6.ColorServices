@@ -20,12 +20,11 @@ ENTRYPOINT ["dotnet", "IC6.Weather.DataLayer.dll"]
 
 # How to build the image:
 # from the `src` folder, exec:
-# docker build -f .\IC6.Weather.DataLayer\Dockerfile -t phenixita/ic6Weatherdatalayer .
+# docker build -f .\IC6.Weather.DataLayer\Dockerfile -t phenixita/ic6weatherdatalayer .
 
 # how to use the image:
-# docker run -d -p 8080:80 --rm phenixita/ic6Weatherdatalayer:latest
-
-# http://localhost:8080/
+# docker run -d -p 8002:80 --rm phenixita/ic6weatherdatalayer:latest
+# curl http://localhost:8002/WeatherData
   
 
 

@@ -13,7 +13,7 @@ data:
     \         group: 'prom'\r\n\r\n  - job_name: 'weatherservice'\r\n    scrape_interval:
     5s\r\n    static_configs:\r\n      - targets: ['weatherservice:8000']\r\n        labels:\r\n
     \         group: 'weatherservice'\r\n\r\n\r\n  - job_name: 'weatherclient'\r\n
-    \   scrape_interval: 5s\r\n    static_configs:\r\n\r\n      - targets: ['weatherclient:8000']\r\n
+    \   scrape_interval: 5s\r\n    static_configs:\r\n\r\n      - targets: ['weatherclient:8001']\r\n
     \       labels:\r\n          group: 'weatherclient'"
 metadata:
   name: prometheus-config

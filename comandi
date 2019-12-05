@@ -1,0 +1,5 @@
+https://localhost:44312/SetPolicies?timeoutSeconds=1&retries=2&expRetries=false&weatherServicePort=888
+
+http://localhost:888/ResiliencyTesting/ResetDelaySeconds
+
+http://localhost:888/ResiliencyTesting/AddSeconds

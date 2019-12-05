@@ -20,12 +20,27 @@ namespace IC6.WeatherClient.Controllers
             _logger = logger;
         }
 
+        private static int _timeoutSeconds = 2;
+        private static int _retries = 2;
+        private static bool _expRetries = false;
+
+        [HttpGet("SetPolicies")]
+        public string SetPolicies(int timeoutSeconds, int retries, bool expRetries, int weatherServicePort)
+        {
+            _timeoutSeconds = timeoutSeconds;
+            _retries = retries;
+            _expRetries = expRetries;
+            Program.WeatherServicePort = weatherServicePort.ToString();
+
+            return $"Timeout seconds: {_timeoutSeconds} / Retries {_retries} / Exp. retries {_expRetries}";
+        }
+
         public IActionResult Index()
         {
             var client = new RestClient($"http://{Program.WeatherServiceUrl}:{Program.WeatherServicePort}");
             var request = new RestRequest("/WeatherForecast/");
 
-            //We assume that by default the weather service is not available.
+            //We assume that by default the wea_ther service is not available.
             //So we provide a default value like N.A.
             ViewBag.WeatherForecast = "N.A.";
             ViewBag.ClientRestRequestInfo = $"client.BaseUrl = {client.BaseUrl}, request.Resource = {request.Resource}";
@@ -35,13 +50,21 @@ namespace IC6.WeatherClient.Controllers
             //wait for a low priority service.
             var retryExp = Policy
               .Handle<Exception>()
-              .WaitAndRetry(5, retryAttempt =>
-                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
+              .WaitAndRetry(_retries, retryAttempt =>
+              {
+                  if (_expRetries)
+                  {
+                      return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt));
+                  }
+                  else
+                  {
+                      return TimeSpan.FromSeconds(2);
+                  }
+              }
               );
 
-            var timeoutPolicy = Policy.Timeout(2, onTimeout: (context, timeSpan, task) =>
+            var timeoutPolicy = Policy.Timeout(_timeoutSeconds, onTimeout: (context, timeSpan, task) =>
             {
-
                 _logger.LogWarning($"{context.PolicyKey} at {context.OperationKey}: execution timed out after {timeSpan.TotalSeconds} seconds.");
 
             }, timeoutStrategy: Polly.Timeout.TimeoutStrategy.Pessimistic); //This is not a best practice for production workloads with Polly. https://github.com/App-vNext/Polly/wiki/Timeout
@@ -51,12 +74,19 @@ namespace IC6.WeatherClient.Controllers
             {
                 retryExp.Wrap(timeoutPolicy).Execute(() =>
                 {
+                    System.Diagnostics.Trace.WriteLine($"{System.Threading.Thread.CurrentThread.ManagedThreadId}: client execute started");
+
                     var weatherForecast = client.Execute(request);
+
+                    System.Diagnostics.Trace.WriteLine($"{System.Threading.Thread.CurrentThread.ManagedThreadId}: client execute ok");
 
                     ViewBag.WeatherForecast = weatherForecast.Content;
                 });
             }
-            catch (Polly.Timeout.TimeoutRejectedException) { }
+            catch (Polly.Timeout.TimeoutRejectedException) { 
+                    System.Diagnostics.Trace.WriteLine("timeout");
+
+            }
             catch (Exception) { }
 
             return View();

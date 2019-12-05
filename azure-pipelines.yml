@@ -68,6 +68,7 @@ stages:
         name: default
       steps:
         - task: Kubernetes@1
+          enabled: false
           inputs:
             connectionType: 'None'
             command: 'apply'
